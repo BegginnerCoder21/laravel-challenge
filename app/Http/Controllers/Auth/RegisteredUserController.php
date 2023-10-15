@@ -7,6 +7,7 @@ use App\Jobs\UserCreatingMailJob;
 use App\Mail\testMail;
 use App\Models\User;
 use App\Notifications\UserCreatingMailNotification;
+use App\Providers\RegisteredMail;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -48,9 +49,11 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        $post = ['title' => 'super title'];
+        event(new RegisteredMail($user));
 
-        $user->notify(new UserCreatingMailNotification($post));
+        // $post = ['title' => 'super title'];
+
+        // $user->notify(new UserCreatingMailNotification($post));
         // UserCreatingMailJob::dispatch($user);
 
         Auth::login($user);
